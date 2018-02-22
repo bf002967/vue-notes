@@ -1,4 +1,4 @@
-v-model使用元素：input/textarea/select
+﻿v-model使用元素：input/textarea/select
 
 v-model.*  后缀修饰符使用
     v-model.lazy 懒更新，当用户光标onblur时才更新model处内容，用于表单验证提高用户体验
@@ -6,3 +6,55 @@ v-model.*  后缀修饰符使用
     去空格，去除用户在model内多输入的空格
     v-model.number
     将model内转化为number类型
+
+vue控制流指令
+
+    <div v-if="role == 'admin">
+        管理员你好
+    </div>
+    <div v-else-if="role == 'hr'">
+        HR你好
+    </div>
+    <div v-else>
+        您没有权限访问
+    </div>
+
+计算属性
+
+Vue({
+	computed:{
+	    sum:function({
+	        return this.math+this.english
+	    })
+	}
+})
+
+   computed 有缓存，计算方面优于methods(每次都要调用)
+
+
+vue组件
+
+   eg:
+    Vue.component('ddd',{
+   	template:'<button @click="on_click">弹弹弹</button>',
+  	methods:{
+		on_click:function(){
+			alert('Yo.');}
+	  	}
+   });
+
+   限定组件的域可将组件写在指定域内(components复数)
+
+   new Vue({
+       el:'#app',
+       components:{
+          ddd:{
+            template:'<button @click="on_click">弹弹弹</button>',
+            methods:{
+              on_click:function(){
+                 alert('Yo.');
+              }
+            }
+          }
+       }
+   })
