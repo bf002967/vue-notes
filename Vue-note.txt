@@ -1,0 +1,8 @@
+v-model使用元素：input/textarea/select
+
+v-model.*  后缀修饰符使用
+    v-model.lazy 懒更新，当用户光标onblur时才更新model处内容，用于表单验证提高用户体验
+    v-model.trim
+    去空格，去除用户在model内多输入的空格
+    v-model.number
+    将model内转化为number类型
