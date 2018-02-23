@@ -58,3 +58,72 @@ vue组件
           }
        }
    })
+
+
+组件
+    component:
+
+      html中标签为<template id="eg"> </template>
+
+      Vue.component('like',{
+          template:'#eg',
+          data:function(){
+              return{
+                 ……                    组件中data必须是函数
+              }
+            },
+          methods:{
+
+          }
+      })
+
+  组件自定义传参
+    props:[]
+            父子通信
+    Vue.component('user',{
+        template:'<a :href="\' http://baidu.com/ \' + username"> @{{username}} </a> ',
+        props:['username'],
+        methods:{}
+    })
+
+  平行组件监听
+     中心事件调度器
+       var Event = new Vue();
+            ///*********组件1
+       Vue.component('li',{
+           template:`
+              <div>
+                  我说：<input @keyup="on_change" v-model="i_said"/>
+              </div>
+           `,
+           methods:{
+              on_change:function(){
+                  Event.$emit('something',this.i_said);
+              }
+           },
+           data:function(){
+              return{
+                  i_said:'',
+              }
+           }
+       })
+        
+           ///**********组件2
+
+     Vue.component('wang',{
+         template:`
+            <div>李说：{{li_said}} </div>,
+         `,
+         data:function(){
+            return{
+               li_said:'',
+            }
+         },
+
+         mounted:function(){
+            var me=this;
+            Event.$on('something' function(data){
+               me.li_said = data;
+            });
+         }
+     })
