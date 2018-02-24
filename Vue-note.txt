@@ -127,3 +127,161 @@ vue组件
             });
          }
      })
+
+
+
+过滤器 filter
+
+    html:
+       {{length | meter(unit)}}
+
+    js:
+       Vue.filter('meter',function(val,unit){
+           ……
+           return val + unit;
+       })
+
+
+自定义指令 Vue.directive
+
+    html: <div v-pin="pined" class="card"> 
+            <button @click="pined=!pined">定住</button>
+            Lorem 
+          </div>
+
+    js:
+          Vue.directive('pin', function(el, binding) {  //*el为v-pin绑定的对象div,binding为v-pin引号内的参数pined
+            var pined = binding.value;
+            if (pined) {
+              el.style.position = 'fixed';
+              el.style.top = '10px';
+              el.style.left = '10px';
+            } else {
+              el.style.position = 'static';
+            }
+          
+          
+          })
+
+          new Vue({
+            el: '.seg',
+            data: {
+              card:{
+                pined:false,
+              }
+            }
+          });
+   
+   修饰符：
+        html: <div v-pin:true.bottom.right="pined" class="card"> 
+
+        js:
+          Vue.directive('pin', function(el, binding) {  //*el为v-pin绑定的对象div,binding为v-pin引号内的参数pined
+            var pined = binding.value;
+
+            var position = binding.modifiers;   //**获取buttom\right
+            var warning = binding.arg;         //**获取参数true
+
+            if (pined) {                       //**判断位置进行修改
+              el.style.position = 'fixed';
+
+                 for(var key in position){
+                     if (position[key]){
+                        el.style[key] = '10px';
+                     }
+                 }
+
+            } else {
+              el.style.position = 'static';
+            }
+
+            if(warning === 'true'){           //**判断参数进行背景色改变
+              el.style.background = 'yellow';
+            }
+          
+          
+          })
+
+
+
+混合mixins:
+    组件重复部分可用mixins节省代码
+
+        js:
+           var base={
+             methods: {
+               show: function() {
+                 this.visible = true;
+               },
+               hide: function() {
+                 this.visible = false;
+               },
+               toggle:function(){
+                     this.visible=!this.visible;
+                   }
+             },
+             data: function() {
+               return {
+                 visible: false,
+               }
+             }
+           };
+           
+           
+           Vue.component('tooltip',{
+               template:`
+                  <div>
+                      <span @mouseenter="show" @mouseleave="hide">BYS</span>
+                      <div v-if="visible">白岩松</div>
+                  </div>
+               `,
+               mixins:[base]
+               //***若要区别定义data内数据可在mixins下重新定义覆盖
+               data:function(){
+                    ******
+               }
+           });
+           
+           Vue.component('popup',{
+             template:`
+                  <div>
+                      <button @click="toggle">Popup</button>
+                      <div v-if="visible">aaaaaaaaaaaaaaaaaaa</div>
+                  </div>
+             `,
+               mixins:[base]
+           })
+
+
+插槽 slot   
+
+     使组件中template中标签内的内容动态化  (template中只能有一个明确的根 //**div)
+
+     html:
+        <panel>
+          <div slot="content">ddddddd</div>
+          <div slot="title">gggg</div>
+          <div slot="footer">wwwww</div>
+        </panel>
+        
+        <template id="tpl">
+          <div>
+           <div class="title">
+                <slot name="title">aa</slot>    <!-- //***指定slot -->
+           </div>
+           <div class="content">
+               <slot name="content">bb</slot>    <!-- //***指定slot -->
+           </div>
+           <div class="footer">
+               <slot name="footer">cc</slot>    <!-- //***指定slot -->
+           </div>
+          </div>
+        </template>
+     js:
+        Vue.component('panel',{
+          template:'#tpl',
+        })
+
+        new Vue({
+            el:'#app',
+        })
